@@ -27,6 +27,7 @@ const config = {
     disambiguatePaths: false,
     runOnCompile: true,
     strict: false,
+    only: ['MarginlyWallet', 'MarginlyWalletFactory'],
     except: ['Mock', 'Test'],
   },
 };

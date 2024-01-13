@@ -1,9 +1,9 @@
-// // SPDX-License-Identifier: GPL-3.0
-// pragma solidity 0.8.19;
+// SPDX-License-Identifier: GPL-3.0
+pragma solidity 0.8.19;
 
-// import './marginlyActions/MarginlyActions.sol';
-// import './marginlySLTP/MarginlySLTP.sol';
+import './marginlyActions/MarginlyActions.sol';
+import './marginlySLTP/MarginlySLTP.sol';
 
-// contract MarginlyWallet is MarginlyActions, MarginlySLTP {
-//   constructor() MarginlyActions() MarginlySLTP() {}
-// }
+contract MarginlyWallet is MarginlyActions {
+  constructor(address marginlyFactory) MarginlyActions(marginlyFactory) {}
+}
