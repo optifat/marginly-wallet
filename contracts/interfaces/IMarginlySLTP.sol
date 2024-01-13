@@ -6,9 +6,9 @@ interface IMarginlySLTP {
 
   event StopLossPriceSet(address indexed marginlyPool, uint256 price);
 
-  function getStopLossPrice(address marginlyPool) external view returns(uint256);
+  function getStopLossPrice(address marginlyPool) external view returns (uint256);
 
-  function getTakeProfitPrice(address marginlyPool) external view returns(uint256);
+  function getTakeProfitPrice(address marginlyPool) external view returns (uint256);
 
   function setStopLossPrice(address marginlyPool, uint256 priceX96) external;
 

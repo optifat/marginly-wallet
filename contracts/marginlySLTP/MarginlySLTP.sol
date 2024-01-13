@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity 0.8.19;
 
-import '@openzeppelin/contracts/access/Ownable2Step.sol';
+import '@openzeppelin/contracts/access/Ownable.sol';
 
 import '../../submodules/marginly/packages/contracts/contracts/interfaces/IMarginlyPool.sol';
 import '../../submodules/marginly/packages/contracts/contracts/dataTypes/Call.sol';
@@ -9,7 +9,7 @@ import '../../submodules/marginly/packages/contracts/contracts/dataTypes/Call.so
 import '../interfaces/IMarginlySLTP.sol';
 import '../poolVerifier/PoolVerifier.sol';
 
-abstract contract MarginlySLTP is IMarginlySLTP, PoolVerifier, Ownable2Step {
+abstract contract MarginlySLTP is IMarginlySLTP, PoolVerifier, Ownable {
   mapping(address => uint256) public getStopLossPrice;
   mapping(address => uint256) public getTakeProfitPrice;
 
@@ -19,6 +19,7 @@ abstract contract MarginlySLTP is IMarginlySLTP, PoolVerifier, Ownable2Step {
     emit StopLossPriceSet(marginlyPool, priceX96);
   }
 
+  /// @dev no need to verify pool since if the price values are set -- pool was verified.
   function setTakeProfitPrice(address marginlyPool, uint256 priceX96) external onlyOwner {
     verifyPool(marginlyPool);
     getTakeProfitPrice[marginlyPool] = priceX96;
@@ -34,14 +35,13 @@ abstract contract MarginlySLTP is IMarginlySLTP, PoolVerifier, Ownable2Step {
 
     uint256 currentBasePrice = 0; //IMarginlyPool(marginlyPool);
 
-    if(currentBasePrice > stopLossPrice && currentBasePrice < takeProfitPrice) {
-      revert ();
+    if (currentBasePrice > stopLossPrice && currentBasePrice < takeProfitPrice) {
+      revert();
     }
 
     // TODO fix args
     IMarginlyPool(marginlyPool).execute(CallType.ClosePosition, 0, 0, 0, false, address(0), 0);
-    
+
     // TODO compensate tx fee
   }
-
 }
