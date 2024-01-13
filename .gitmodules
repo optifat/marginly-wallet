@@ -1,0 +1,4 @@
+[submodule "submodules/marginly"]
+	path = submodules/marginly
+	url = https://github.com/eq-lab/marginly/
+	branch = main
