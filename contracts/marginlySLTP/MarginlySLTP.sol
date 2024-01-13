@@ -3,9 +3,9 @@ pragma solidity 0.8.19;
 
 import '@openzeppelin/contracts/access/Ownable.sol';
 
-import '../../submodules/marginly/packages/contracts/contracts/interfaces/IMarginlyPool.sol';
 import '../../submodules/marginly/packages/contracts/contracts/dataTypes/Call.sol';
 
+import '../interfaces/IMarginlyPoolExtended.sol';
 import '../interfaces/IMarginlySLTP.sol';
 import '../poolVerifier/PoolVerifier.sol';
 
@@ -19,13 +19,13 @@ abstract contract MarginlySLTP is IMarginlySLTP, PoolVerifier, Ownable {
     emit StopLossPriceSet(marginlyPool, priceX96);
   }
 
-  /// @dev no need to verify pool since if the price values are set -- pool was verified.
   function setTakeProfitPrice(address marginlyPool, uint256 priceX96) external onlyOwner {
     verifyPool(marginlyPool);
     getTakeProfitPrice[marginlyPool] = priceX96;
     emit TakeProfitPriceSet(marginlyPool, priceX96);
   }
 
+  /// @dev no need to verify pool since if the price values are set -- pool was verified.
   function closePositionSLTP(address marginlyPool) external {
     uint256 stopLossPrice = getStopLossPrice[marginlyPool];
     uint256 takeProfitPrice = getTakeProfitPrice[marginlyPool];
@@ -33,14 +33,14 @@ abstract contract MarginlySLTP is IMarginlySLTP, PoolVerifier, Ownable {
       takeProfitPrice == type(uint256).max;
     }
 
-    uint256 currentBasePrice = 0; //IMarginlyPool(marginlyPool);
+    uint256 currentBasePrice = IMarginlyPoolExtended(marginlyPool).getBasePrice().inner;
 
     if (currentBasePrice > stopLossPrice && currentBasePrice < takeProfitPrice) {
       revert();
     }
 
     // TODO fix args
-    IMarginlyPool(marginlyPool).execute(CallType.ClosePosition, 0, 0, 0, false, address(0), 0);
+    IMarginlyPoolExtended(marginlyPool).execute(CallType.ClosePosition, 0, 0, 0, false, address(0), 0);
 
     // TODO compensate tx fee
   }
