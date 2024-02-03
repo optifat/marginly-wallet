@@ -1,5 +1,6 @@
 import '@nomicfoundation/hardhat-toolbox';
 require('hardhat-contract-sizer');
+require('hardhat-dependency-compiler');
 
 const config = {
   solidity: {
@@ -29,6 +30,17 @@ const config = {
     strict: false,
     only: ['MarginlyWallet', 'MarginlyWalletFactory'],
     except: ['Mock', 'Test'],
+  },
+  dependencyCompiler: {
+    paths: [
+      'submodules/marginly/packages/router/contracts/MarginlyRouter.sol',
+      'submodules/marginly/packages/contracts/contracts/MarginlyPool.sol',
+      'submodules/marginly/packages/contracts/contracts/MarginlyFactory.sol',
+      'submodules/marginly/packages/contracts/contracts/test/TestUniswapFactory.sol',
+      'submodules/marginly/packages/contracts/contracts/test/TestUniswapPool.sol',
+      'submodules/marginly/packages/contracts/contracts/test/TestSwapRouter.sol',
+      'submodules/marginly/packages/contracts/contracts/test/TestERC20Token.sol',
+    ],
   },
 };
 
