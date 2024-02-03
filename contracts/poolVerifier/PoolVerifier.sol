@@ -9,7 +9,7 @@ import '../../submodules/marginly/packages/contracts/contracts/interfaces/IMargi
 contract PoolVerifier {
   error WrongMarginlyPoolAddress();
 
-  address public marginlyFactory;
+  address public immutable marginlyFactory;
   mapping(address => bool) isPoolVerified;
 
   constructor(address _marginlyFactory) {

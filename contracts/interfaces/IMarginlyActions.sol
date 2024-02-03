@@ -31,6 +31,4 @@ interface IMarginlyActions {
   ) external;
 
   function closePosition(address marginlyPool, uint256 limitPriceX96, uint256 swapCalldata) external;
-
-  function flip(address marginlyPool, uint256 limitPriceX96, uint256 swapCalldata) external;
 }
