@@ -1,12 +1,14 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity 0.8.19;
 
-abstract contract TriggerAllowance {
+import '../ownership/Ownership.sol';
+
+abstract contract TriggerAllowance is Ownership {
   error Forbidden();
 
   mapping(address => mapping(address => bytes)) triggerParams;
 
-  function allowTrigger(address trigger, address marginlyPool, bytes calldata params) external {
+  function allowTrigger(address trigger, address marginlyPool, bytes calldata params) external onlyOwner {
     triggerParams[trigger][marginlyPool] = params;
   }
 

@@ -12,19 +12,10 @@ import '../../submodules/marginly/packages/router/contracts/MarginlyRouter.sol';
 import '../interfaces/IMarginlyPoolExtended.sol';
 import '../interfaces/IMarginlyActions.sol';
 import '../poolVerifier/PoolVerifier.sol';
+import '../ownership/Ownership.sol';
 
-contract MarginlyActions is IMarginlyActions, PoolVerifier {
-  uint24 public constant ONE = 1000000;
-  address public immutable owner;
-
-  constructor(address marginlyFactory, address _owner) PoolVerifier(marginlyFactory) {
-    owner = _owner;
-  }
-
-  modifier onlyOwner() {
-    require(msg.sender == owner);
-    _;
-  }
+contract MarginlyActions is IMarginlyActions, PoolVerifier, Ownership {
+  constructor(address marginlyFactory, address _owner) PoolVerifier(marginlyFactory) Ownership(_owner) {}
 
   function depositBase(address marginlyPool, uint256 baseAmount) external onlyOwner {
     verifyPool(marginlyPool);
